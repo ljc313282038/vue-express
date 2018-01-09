@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <header>
+    <header style="padding: 0 40px;">
 
       <span><a class="mylogo"></a><a v-for="(item,index) in navlist" :key="item.navn" class="navA" >{{item.navn}}</a></span>
       <span>

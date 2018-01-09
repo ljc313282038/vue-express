@@ -112,6 +112,7 @@ export default {
 
 </script>
 <style scoped>
+
 .talk {
   width: 100%;
   background-color: #ccc;
@@ -205,6 +206,7 @@ export default {
 .left_main {
   float: left;
   width: 885px;
+
 }
 
 .right {

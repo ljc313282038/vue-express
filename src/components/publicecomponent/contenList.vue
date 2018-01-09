@@ -89,7 +89,6 @@ export default {
 }
 .tj {
   width: 100%;
-  background: #ccc;
   color: red
 }
 

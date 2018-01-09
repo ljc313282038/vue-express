@@ -68,7 +68,7 @@ export default {
 .left_main {
   float: left;
   width: 885px;
-  background-color: #c7c7c7;
+margin-bottom: 40px;
   
 }
 
