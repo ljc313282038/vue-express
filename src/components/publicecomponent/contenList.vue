@@ -2,14 +2,14 @@
   <div class="tj">
     <ul class="conentBox">
       <li v-for="item in rott" :key="item.index">
-        <div :data-id='item.dataId'>
+        <div :data-id='item.id'>
         <div class="title">
-          <h2><a :href="'page/pageContent/'+item.dataId">{{item.title}}</a></h2>
+          <h2><a :href="'page/pageContent/'+item.id">{{item.titile}}</a></h2>
         </div>
         <div class="tag">
           <span class="time"><i></i><a>{{item.time}}</a></span>
           <span class="read"><i></i><a>{{item.read}}</a></span>
-          <span class="talk"><i></i><a>{{item.talk}}</a></span>
+          <!-- <span class="talk"><i></i><a>{{item.talk}}</a></span> -->
         </div>
         </div>
       </li>
@@ -41,15 +41,15 @@ export default {
     fetchDate() {
       var rot = this.$route.query.name;
       this.$http.get('/api/login/', { params: { rot: rot } }).then((res) => {
-        this.rott = res.data.contentList;
-        console.log(this.rott);
+        this.rott = res.data;
+        //console.log(this.rott);
       }, (res) => {
         // body...
       })
     },
     ajax() {
       this.$http.get('/api/login', { params: { rot: 'tj' } }).then((res) => {
-        this.rott = res.data.contentList;
+        this.rott = res.data;
       }, (res) => {
         // body...
       })

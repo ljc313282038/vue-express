@@ -223,6 +223,8 @@ var content = {
     ]
 };
 
+//数据库连接
+var db = require('./db.js');
 
 router.post('/api/login/content', (req, res) => {
     //拿到前端发过来的评论
@@ -246,24 +248,28 @@ router.post('/api/login/content', (req, res) => {
 router.get('/api/login/pageContent', (req, res) => {
     // 输出 JSON 格式
     var mydataId = req.query.dataId;
-    //找到dataId对应的文章
-    var arrayFilter = content.contentList.filter(function(item) {
-        return item.dataId == mydataId;
+    var sql = 'SELECT * FROM `articlelist` WHERE ID='+'\"'+mydataId+'\"';
+    db.query(sql, function(err, rows, fields) {
+        if (err) {
+            console.log(err);
+            return;
+        }
+         response =rows;
+         res.end(JSON.stringify(response));
     });
-    //返回数据前端用res.data接受
-    response = { contentActil: arrayFilter };
-    res.end(JSON.stringify(response));
 });
 //给首页发送文章列表
-
 router.get('/api/login', (req, res) => {
     // 输出 JSON 格式
     var params = req.query;
-    var contentList = content.contentList.filter(function(item) {
-        return item.type == params.rot;
+    var sql = 'SELECT * FROM `articlelist` WHERE TYPE='+'\"'+params.rot+'\"';
+    db.query(sql, function(err, rows, fields) {
+        if (err) {
+            return;
+        }
+         response =rows;
+         res.end(JSON.stringify(response));
     });
-    response = { contentList: contentList }
-    res.end(JSON.stringify(response));
 });
 //登录api
 router.post('/api/login/onlogin', (req, res) => {
@@ -280,7 +286,6 @@ router.post('/api/login/onlogin', (req, res) => {
 
 router.get('/api/login/latest', (req, res) => {
     var params = req.query;
-    console.log(params);
     var contentLatest = content.latest.filter(function(item) {
         return item.latestId == params.val;
     });
