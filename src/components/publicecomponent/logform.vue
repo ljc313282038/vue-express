@@ -74,8 +74,9 @@ export default {
         this.$http.post('/api/login/onlogin', { userName: this.userName, passWord: this.passWord }).then((data) => {
           //登录成功后返回的值
           var onloginData = data.body;
+          console.log(onloginData);
           //组件向外面传递方法
-          this.$emit('hasLogin', onloginData[0]);
+          this.$emit('hasLogin', onloginData);
         }, (data) => {
           console.log("err");
         })

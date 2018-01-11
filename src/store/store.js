@@ -5,7 +5,6 @@ const state = {
   user_name: 1,
   user_name2: 2,
   userName:'',
-  passWord:'',
   userAvatar:'',
    nowIndex:0,
   productList: [{

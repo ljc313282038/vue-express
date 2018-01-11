@@ -6,6 +6,7 @@ const fs = require('fs');
 // 引入处理路径的模块
 const path = require('path');
 const router = express.Router();
+
 //模拟文章
 var content = {
     contentList: [{
@@ -275,13 +276,24 @@ router.get('/api/login', (req, res) => {
 router.post('/api/login/onlogin', (req, res) => {
     // 拿到前端发过来的用户和密码
     var userData_1 = req.body;
-    console.log(userData_1);
     //在用户中查找与请求相同的返回--登录成功
     var userData_2 = content.users.filter(function(item) {
         return item.userName == userData_1.userName && item.passWord == userData_1.passWord;
     });
-    response = userData_2;
-    res.end(JSON.stringify(response));
+    if(userData_2){
+          req.session.login = userData_2[0].userName; //每一次访问时，session对象的lastPage会自动的保存或更新内存中的session中去。         
+    }
+  
+    response = req.session.login;
+    res.end(response);
+});
+//
+router.get('/api/beforlogin', (req, res) => {
+   
+  if(req.session.login){
+    response = req.session.login;
+    res.end(response);
+  }
 });
 
 router.get('/api/login/latest', (req, res) => {

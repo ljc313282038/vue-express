@@ -50,8 +50,7 @@ export default {
       this[attr] = false
     },
     soccesLogin(data) {
-      this.$store.state.userName = data.userName;
-      this.$store.state.passWord = data.passWord;
+      this.$store.state.userName = data;
       console.log(this.$store.state.userName);
       this.closeDialog("show_login")
     },
@@ -61,6 +60,14 @@ export default {
     tuichu() {
       this.$store.state.userName = ""
     }
+  },
+  created() {     
+      this.$http.get('/api/beforlogin').then((res) => {
+        this.$store.state.userName = res.data;
+        console.log(this.$store.state.userName);
+      }, (res) => {
+        // body...
+      })
   }
 }
 

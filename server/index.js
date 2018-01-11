@@ -1,7 +1,16 @@
 // 引入Express
 const express = require('express');
+const session = require('express-session');
+const cookieParser = require('cookie-parser');
 const app = express();
-
+app.use(cookieParser());
+app.use(session({
+    secret: '12345',
+    name: 'testapp',   //这里的name值得是cookie的name，默认cookie的name是：connect.sid
+    cookie: {maxAge: 1000 * 60 * 60 * 24 * 30 },  //设置maxAge是30天，即80s后session和相应的cookie失效过期
+    resave: false,
+    saveUninitialized: true,
+}));
 
 // 引入文件模块
 const fs = require('fs');
@@ -9,6 +18,7 @@ const fs = require('fs');
 const path = require('path');
 // 引入处理post数据的模块
 const bodyParser = require('body-parser');
+
 // 引入编写好的api
 const api = require('./api'); 
 
