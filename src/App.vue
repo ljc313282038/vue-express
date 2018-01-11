@@ -64,7 +64,7 @@ export default {
   created() {     
       this.$http.get('/api/beforlogin').then((res) => {
         this.$store.state.userName = res.data;
-        console.log(this.$store.state.userName);
+        // console.log(this.$store.state.userName);
       }, (res) => {
         // body...
       })

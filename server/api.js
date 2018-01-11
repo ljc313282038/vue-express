@@ -232,15 +232,17 @@ router.post('/api/login/content', (req, res) => {
     var textContent = req.body.content;
     //用于分辨那篇文章并且为他添加评论
     var mydataId = req.body.dataId;
-    //找到dataId对应的文章
-    var arrayFilter = content.contentList.filter(function(item) {
-        return item.dataId == mydataId;
+    var author_pl=req.session.login;
+   var sql="INSERT INTO articlelist_pl (`articlelist_id`,`author_pl`,`content_pl`)VALUES ( '" + mydataId+"', '"+author_pl+"', '"+textContent+"');"
+     db.query(sql, function(err, data) {
+        if (err) {
+            console.log(err);
+            return;
+        }
+        console.log("ok");
     });
 
-    //然后给找到的文章评论字段添加评论
-    arrayFilter[0].pinlunlist.push({ pl: textContent });
-    console.log(arrayFilter);
-    //返回数据前端用data.body接受
+   
     response = { pl: textContent };
     res.end(JSON.stringify(response));
 });
@@ -250,13 +252,27 @@ router.get('/api/login/pageContent', (req, res) => {
     // 输出 JSON 格式
     var mydataId = req.query.dataId;
     var sql = 'SELECT * FROM `articlelist` WHERE ID='+'\"'+mydataId+'\"';
+    var sql2 = 'SELECT * FROM `articlelist_pl` WHERE articlelist_id='+'\"'+mydataId+'\"';
+    response={
+        wz:"1",
+        pl:"1"
+    };
     db.query(sql, function(err, rows, fields) {
         if (err) {
             console.log(err);
             return;
         }
-         response =rows;
+         response.wz =rows;
+        
+    });
+    db.query(sql2, function(err, rows, fields) {
+        if (err) {
+            console.log(err);
+            return;
+        }
+         response.pl =rows;
          res.end(JSON.stringify(response));
+         console.log(response.pl);
     });
 });
 //给首页发送文章列表

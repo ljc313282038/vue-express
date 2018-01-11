@@ -3,15 +3,15 @@
         <div class="container">
             <div class="left_main">
                 <div class="title">
-                    {{content3.titile}}{{$route.params.id}}
+                    {{content3.wz[0].titile}}{{$route.params.id}}
                 </div>
                 <div class="tag">
-                    <a>{{content3.author}}</a>
-                    <a>{{content3.time}}</a>
-                    <a>{{content3.read}}</a>
-                    <a>{{content3.like}}</a>
+                    <a>{{content3.wz[0].author}}</a>
+                    <a>{{content3.wz[0].time}}</a>
+                    <a>{{content3.wz[0].read}}</a>
+                    <a>{{content3.wz[0].like}}</a>
                 </div>
-                <div class="text">{{content3.content}}</div>
+                <div class="text">{{content3.wz[0].content}}</div>
                 <div>
                     <div id="main">
                         <mavon-editor v-model="content" @save='saveContent' :toolbars='toolbars' :subfield='false' style="height:100" />
@@ -19,8 +19,8 @@
                     </div>
                     <div class="talk">
                         <ul>
-                            <li v-for='item in content3.pinlunlist' :key="item.index">
-                                <i class="uselog"></i><a>{{item.pl}}</a>
+                            <li v-for='(item,index) in content3.pl' :key="index">
+                                <i class="uselog"></i><a>{{item.content_pl}}</a>
                             </li>
                         </ul>
                     </div>
@@ -83,11 +83,14 @@ export default {
     methods: {
         //上传评论
         saveContent() {
-            this.$http.post('/api/login/content', { content: this.content, dataId: this.dataId }).then((data) => {
-                var pl = data.body;
+            this.$http.post('/api/login/content', { content: this.content, dataId: this.dataId}).then((data) => {
+                var pl = data.body.pl;
                 //p1没刷新前先将当下评论的数据渲染到页面
                 //push 到conten3中及时渲染页面重置或是刷新则从后台读取
-                this.content3.pinlunlist.push(pl);
+                //
+                this.content3.pl.push({content_pl:pl});
+                console.log(this.content3)
+               
             }, (data) => {
                 console.log("err");
             })
@@ -95,8 +98,7 @@ export default {
         //获取文章及其评论列表
         ajax() {
             this.$http.get('/api/login/pageContent', { params: { dataId: this.dataId } }).then((res) => {
-                this.content3 = res.data[0];
-                console.log(this.content3);
+                this.content3 = res.data;
             }, (res) => {
                 // body...
             })
