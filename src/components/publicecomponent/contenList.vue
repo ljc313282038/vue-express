@@ -1,7 +1,7 @@
 <template>
   <div class="tj">
     <ul class="conentBox">
-      <li v-for="item in rott" :key="item.index" @click="pageContentA(item)">
+      <li v-for="(item,index) in rott" :key="item.index" @click="pageContentA(item)">
         <div :data-id='item.id'>
         <div class="title">
           <!-- <h2 :href="'page/pageContent/'+item.id">{{item.titile}}</h2> -->
@@ -62,9 +62,9 @@ export default {
       //修改数据中心里的值
       var items=item;
       this.$store.commit('seTpageContentAData',items);
-      this.$router.push({path: '../page/pageContent'});
-      console.log(1);
-      console.log(this.$store.state.pageContentAData);
+      var obj=JSON.stringify(this.$store.state.pageContentAData);//方法将json对象转换成字符串形式
+          localStorage.setItem('ms',obj);
+      this.$router.push({path: 'page/pageContent'});
     }
   },
   mounted() {

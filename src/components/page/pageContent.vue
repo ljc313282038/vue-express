@@ -1,28 +1,27 @@
 <template>
     <div>
         <div class="container">
-            <a>{{mas}}</a>
             <div class="left_main">
 
                 <div class="title">
-                    {{content4.titile}}{{$route.params.id}}
+                    {{mas.titile}}
                 </div>
                 <div class="tag">
                     <a>
-                        {{content4.author}}
+                        {{mas.author}}
                     </a>
                     <a>
-                        {{content4.time}}
+                        {{mas.time}}
                     </a>
                     <a>
-                        {{content4.read}}
+                        {{mas.read}}
                     </a>
                     <a>
-                        {{content4.like}}
+                        {{mas.like}}
                     </a>
                 </div>
                 <div class="text">
-                    {{content4.content}}
+                    {{mas.content}}
                 </div>
                 <div>
                     <div id="main">
@@ -96,12 +95,12 @@ export default {
     methods: {
         //上传评论
         saveContent() {
-            this.$http.post('/api/login/content', { content: this.content, dataId: this.dataId }).then((data) => {
+            this.$http.post('/api/login/content', { content: this.content, dataId: this.mas.id }).then((data) => {
                 var pl = data.body.pl;
                 //p1没刷新前先将当下评论的数据渲染到页面
                 //push 到conten3中及时渲染页面重置或是刷新则从后台读取
                 //
-                this.content3.pl.push({ content_pl: pl });
+                this.content3.push({ content_pl: pl });
                 console.log(this.content3)
 
             }, (data) => {
@@ -110,23 +109,31 @@ export default {
         },
         //获取文章及其评论列表
         ajax() {
-            this.$http.get('/api/login/pageContent', { params: { dataId: this.dataId } }).then((res) => {
-                this.content3 = res.data.pl;
-                this.content4 = res.data.wz[0];
+            var id=this.mas.id
+            this.$http.get('/api/login/pageContent', { params: { dataId: id } }).then((res) => {
+                this.content3 = res.data;
+                 //console.log(this.content3);
+                
             }, (res) => {
                 // body...
             })
         },
          pageContentA(){
-         this.mas=this.$store.state.pageContentAData;
-         console.log(2);
-         console.log(this.mas);
+    
+         if(this.$store.state.pageContentAData!=""){
+             this.mas=this.$store.state.pageContentAData;
+         }else{
+            this.mas=JSON.parse(localStorage.ms);
+             // console.log(this.mas.id);
+         }
+         
     }
     },
     mounted() { //事件钩子 加在完成后
         this.dataId = this.$route.params.id
+        
+        this.pageContentA();
         this.ajax();
-        this.pageContentA()
 
     },
     created() { //事件钩子 组件渲染完成后

@@ -87,28 +87,16 @@ router.post('/api/login/content', (req, res) => {
 router.get('/api/login/pageContent', (req, res) => {
     // 输出 JSON 格式
     var mydataId = req.query.dataId;
-    var sql = 'SELECT * FROM `articlelist` WHERE ID='+'\"'+mydataId+'\"';
-    var sql2 = 'SELECT * FROM `articlelist_pl` WHERE articlelist_id='+'\"'+mydataId+'\"';
-    response={
-        wz:"1",
-        pl:"1"
-    };
+    var sql = 'SELECT * FROM `articlelist_pl` WHERE articlelist_id='+'\"'+mydataId+'\"';
+
     db.query(sql, function(err, rows, fields) {
         if (err) {
             console.log(err);
             return;
         }
-         response.wz =rows;
-        
-    });
-    db.query(sql2, function(err, rows, fields) {
-        if (err) {
-            console.log(err);
-            return;
-        }
-         response.pl =rows;
+         response=rows;
          res.end(JSON.stringify(response));
-         console.log(response.pl);
+         console.log(response);
     });
 });
 //给首页发送文章列表

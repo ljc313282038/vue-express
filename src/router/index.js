@@ -17,7 +17,7 @@ export default new Router({
       component: pageIndex
     },
      {
-      path: '/page/pageContent/:id',
+      path: '/page/pageContent',
       name:'pageContent',
       component: pageContent
     },
