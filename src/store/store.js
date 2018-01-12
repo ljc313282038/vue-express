@@ -2,12 +2,10 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 Vue.use(Vuex)
 const state = {
-  user_name: 1,
-  user_name2: 2,
   userName:'',
   userAvatar:'',
   pageContentAData:'',
-   nowIndex:0,
+  nowIndex:0,
   productList: [{
       name: '推荐',
       path: 'contenList',

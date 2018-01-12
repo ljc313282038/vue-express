@@ -13,20 +13,22 @@ export default new Router({
     {
       path: '/',
       name:'indexpage',
-      redirect:'/contenList',
+      // redirect:'/contenList',
       component: pageIndex
     },
      {
       path: '/page/pageContent',
       name:'pageContent',
       component: pageContent
-    },
-    {
-      path: '/contenList',
-        children:[
-        {path: '/contenList',name:'contenList', component:contenList},
-        ],
-      component: pageIndex
     }
+    // {
+    //   path: '/contenList',
+    //     children:[
+    //     {path: '/contenList',
+    //     name:'contenList', 
+    //     component:contenList},
+    //     ],
+    //   component: pageIndex
+    // }
   ]
 })

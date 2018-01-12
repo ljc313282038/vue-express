@@ -2,7 +2,6 @@
     <div>
         <div class="container">
             <div class="left_main">
-
                 <div class="title">
                     {{mas.titile}}
                 </div>
@@ -44,12 +43,11 @@
 import { mapState } from "vuex" // 引入mapState 
 
 export default {
-    components: {
-    },
+    components: {},
     name: 'pageContent',
     data() {
         return {
-            mas:'',
+            mas: '',
             content: '', //要上传的评论
             content2: '', //没有刷新页面前添加的评论
             content3: '', //评论
@@ -109,35 +107,31 @@ export default {
         },
         //获取文章及其评论列表
         ajax() {
-            var id=this.mas.id
+            var id = this.mas.id
             this.$http.get('/api/login/pageContent', { params: { dataId: id } }).then((res) => {
                 this.content3 = res.data;
-                 //console.log(this.content3);
-                
+                //console.log(this.content3);
+
             }, (res) => {
                 // body...
             })
         },
-         pageContentA(){
-    
-         if(this.$store.state.pageContentAData!=""){
-             this.mas=this.$store.state.pageContentAData;
-         }else{
-            this.mas=JSON.parse(localStorage.ms);
-             // console.log(this.mas.id);
-         }
-         
-    }
+        pageContentA() {
+
+            if (this.$store.state.pageContentAData != "") {
+                this.mas = this.$store.state.pageContentAData;
+            } else {
+                this.mas = JSON.parse(localStorage.ms);
+                // console.log(this.mas.id);
+            }
+        }
     },
     mounted() { //事件钩子 加在完成后
         this.dataId = this.$route.params.id
-        
         this.pageContentA();
         this.ajax();
-
     },
-    created() { //事件钩子 组件渲染完成后
-       
+    created() { //事件钩子 组件渲染完成后 
     },
 }
 </script>

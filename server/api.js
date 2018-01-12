@@ -77,8 +77,6 @@ router.post('/api/login/content', (req, res) => {
         }
         console.log("ok");
     });
-
-   
     response = { pl: textContent };
     res.end(JSON.stringify(response));
 });
@@ -88,7 +86,7 @@ router.get('/api/login/pageContent', (req, res) => {
     // 输出 JSON 格式
     var mydataId = req.query.dataId;
     var sql = 'SELECT * FROM `articlelist_pl` WHERE articlelist_id='+'\"'+mydataId+'\"';
-
+ 
     db.query(sql, function(err, rows, fields) {
         if (err) {
             console.log(err);
@@ -96,7 +94,7 @@ router.get('/api/login/pageContent', (req, res) => {
         }
          response=rows;
          res.end(JSON.stringify(response));
-         console.log(response);
+         // console.log(response);
     });
 });
 //给首页发送文章列表
@@ -123,7 +121,6 @@ router.post('/api/login/onlogin', (req, res) => {
     if(userData_2){
           req.session.login = userData_2[0].userName; //每一次访问时，session对象的lastPage会自动的保存或更新内存中的session中去。         
     }
-  
     response = req.session.login;
     res.end(response);
 });
