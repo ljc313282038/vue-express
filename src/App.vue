@@ -23,6 +23,7 @@
 <script>
 import mydialog from '@/components/publicecomponent/mydialog'
 import logform from '@/components/publicecomponent/logform'
+import Hub from '@/components/publicecomponent/hub.js'
 import { mapState } from "vuex" // 引入mapState 
 export default {
   components: {

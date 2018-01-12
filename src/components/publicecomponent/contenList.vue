@@ -1,10 +1,12 @@
 <template>
   <div class="tj">
     <ul class="conentBox">
-      <li v-for="item in rott" :key="item.index">
+      <li v-for="item in rott" :key="item.index" @click="pageContentA(item)">
         <div :data-id='item.id'>
         <div class="title">
-          <h2><a :href="'page/pageContent/'+item.id">{{item.titile}}</a></h2>
+          <!-- <h2 :href="'page/pageContent/'+item.id">{{item.titile}}</h2> -->
+          <h2> {{item.titile}}</h2>
+          
         </div>
         <div class="tag">
           <span class="time"><i></i><a>{{item.time}}</a></span>
@@ -17,6 +19,7 @@
   </div>
 </template>
 <script type="text/javascript">
+import { mapState } from "vuex" // 引入mapState 
 export default {
   name: 'tj',
   data() {
@@ -37,6 +40,7 @@ export default {
       ]
     }
   },
+
   methods: {
     fetchDate() {
       var rot = this.$route.query.name;
@@ -53,19 +57,23 @@ export default {
       }, (res) => {
         // body...
       })
+    },
+    pageContentA(item){
+      //修改数据中心里的值
+      var items=item;
+      this.$store.commit('seTpageContentAData',items);
+      this.$router.push({path: '../page/pageContent'});
+      console.log(1);
+      console.log(this.$store.state.pageContentAData);
     }
-  },
-
-  created() { //事件钩子组件渲染完成后
-    this.fetchDate();
   },
   mounted() {
     this.ajax()
   },
-
   watch: {
     "$route": "fetchDate"
-  }
+  },
+  
 }
 
 </script>

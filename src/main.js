@@ -10,6 +10,7 @@ import mavonEditor from 'mavon-editor'
 import 'mavon-editor/dist/css/index.css'
 import './assets/css/rest.css'
 
+
 Vue.use(mavonEditor)
 Vue.use(VueResource) 
 Vue.use(Element)
@@ -21,5 +22,8 @@ new Vue({
   store:storeConfig,//使用store
   router,
   template: '<App/>',
+  data:{
+  	eventHub: new Vue()
+  },
   components: { App }
 })

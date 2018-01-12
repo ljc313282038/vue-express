@@ -6,6 +6,7 @@ const state = {
   user_name2: 2,
   userName:'',
   userAvatar:'',
+  pageContentAData:'',
    nowIndex:0,
   productList: [{
       name: '推荐',
@@ -93,8 +94,8 @@ const state = {
 
 }
 const mutations = {
-  mutationName(state) {
-    state.user_name += 1;
+  seTpageContentAData(state,n) {
+    state.pageContentAData=n;
   }
 }
 const actions = {}

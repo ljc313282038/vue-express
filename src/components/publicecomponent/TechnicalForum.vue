@@ -1,7 +1,7 @@
 <template>
   <div class="Technical">
     <h3 class="feed_new_tit">
-            <span class="line"></span><span class="txt">技术论坛</span>
+            <span class="line"></span><span  @click="eve" class="txt">技术论坛</span>
     </h3>
     <div class="Technicalbox">
       <div class="Technicallist" v-for="(item,index) in Technical ">
@@ -18,7 +18,8 @@
   </div>
 </template>
 <script type="text/javascript">
-import { mapState } from "vuex" // 引入mapState 
+import { mapState } from "vuex" // 引入mapState
+import Hub from './hub.js'//兄弟之间传递值事件中心 
 export default {
   name: 'Technical',
   data() {
@@ -27,7 +28,11 @@ export default {
     }
   },
   methods: {
-
+    //兄弟之间传递值
+    eve() {
+        Hub.$emit('change',"hehe"); //Hub触发事件
+    },
+    
   },
   computed: mapState({
     Technical: 'Technical',

@@ -13,6 +13,7 @@
 </template>
 <script type="text/javascript">
 import { mapState } from "vuex" // 引入mapState 
+import Hub from './hub.js' //兄弟之间传递值事件中心
 export default {
     name: 'latest',
     components: {
@@ -21,13 +22,21 @@ export default {
     data() {
         return {
             myactive: 1,
-            latestData: ""
+            latestData: "",
+
         }
     },
     methods: {
         swich(index) {
             this.myactive = index;
         }
+    },
+    //兄弟之间传递值
+    created() { //事件钩子 组件渲染完成后
+        Hub.$on('change', (data) => { 
+            this.msg = data;
+            console.log(this.msg+1);
+        });
     },
     mounted: function() {
         this.$http.get('/api/login/latest', { params: { val: this.myactive } }).then((res) => {
