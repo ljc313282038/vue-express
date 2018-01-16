@@ -10,11 +10,14 @@
     "build": "node build/build.js"
   },
   "dependencies": {
+    "axios": "^0.17.1",
     "body-parser": "^1.18.2",
+    "co": "^4.6.0",
     "cookie-parser": "^1.4.3",
     "element-ui": "^2.0.9",
     "express": "^4.16.2",
     "express-session": "^1.15.6",
+    "formidable": "^1.1.1",
     "mavon-editor": "^2.4.15",
     "mongodb": "^3.0.1",
     "my-vue-editor": "^1.0.10",

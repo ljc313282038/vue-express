@@ -3,6 +3,7 @@ import Router from 'vue-router'
 import HelloWorld from '@/components/HelloWorld'
 import pageIndex from '@/components/page/pageIndex'
 import pageContent from '@/components/page/pageContent'
+import writeBlogging from '@/components/page/writeBlogging'
 import lunbo from '@/components/publicecomponent/lunbo'
 import contenList from '@/components/publicecomponent/contenList'
 
@@ -20,6 +21,11 @@ export default new Router({
       path: '/page/pageContent',
       name:'pageContent',
       component: pageContent
+    },
+    {
+      path: '/page/writeBlogging',
+      name:'writeBlogging',
+      component: writeBlogging
     }
     // {
     //   path: '/contenList',

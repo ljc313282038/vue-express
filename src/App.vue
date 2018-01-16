@@ -2,10 +2,10 @@
   <div id="app">
     <header style="padding: 0 40px;">
 
-      <span><a class="mylogo"></a><a v-for="(item,index) in navlist" :key="item.navn" class="navA" >{{item.navn}}</a></span>
+      <span><a class="mylogo"></a><a v-for="(item,index) in navlist" :key="item.navn" class="navA" @click="go(index)">{{item.navn}}</a></span>
       <span>
         <div class="searchBox"><input type="text" name="search"><a class="searchBtn">搜索</a></div>
-        <div class="blog"><i class="xbk"></i>写博客</div>
+        <div class="blog" @click="writeBlogging"><i class="xbk" ></i>写博客</div>
         <div class="logon">
           <a class="vdl" v-if="userName==''" @click="login">登录</a>
           <a class="ydl" v-else><i class="userAvatar"></i>{{userName}}</a>
@@ -47,6 +47,11 @@ export default {
     login() {
       this.show_login = true
     },
+    go(index){
+        if(index==0){
+            this.$router.push({ name: 'indexpage' });
+        }
+    },
     closeDialog(attr) {
       this[attr] = false
     },
@@ -60,14 +65,16 @@ export default {
     },
     tuichu() {
       this.$store.state.userName = ""
+    },
+    writeBlogging(){
+     this.$router.push({ name: 'writeBlogging' });
     }
   },
   created() {     
       this.$http.get('/api/beforlogin').then((res) => {
         this.$store.state.userName = res.data;
-        // console.log(this.$store.state.userName);
       }, (res) => {
-        // body...
+         console.log('未登录');
       })
   }
 }
@@ -202,6 +209,16 @@ header span {
   margin-right: 20px;
   display: flex;
   align-items: center;
+}
+.v-note-wrapper .v-note-op{
+  box-shadow: none!important;
+  border: 1px solid #dcdfe6 !important;
+      border-bottom: none !important;
+}
+.v-note-wrapper .v-note-panel{
+   box-shadow: none!important;
+  border: 1px solid #dcdfe6 !important;
+
 }
 
 </style>

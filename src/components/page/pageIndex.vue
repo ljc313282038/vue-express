@@ -3,8 +3,6 @@
         <template>
             <div class="nav_box">
                 <ul class="nav">
-                    <!--  <router-link  v-for="(item,index) in productList" :key="item.key" @click.native="xuanze(index)" :class="{active:index==nowIndex}"   tag="li" 
-        :to="{path:item.path,query:{name:item.key}}">{{item.name}}</router-link> -->
                     <li v-for="(item,index) in productList" :key="item.key" @click="xuanze(index,item.key)" :class="{active:index==nowIndex}">{{item.name}}</li>
                 </ul>
             </div>
@@ -13,7 +11,6 @@
             <adv></adv>
             <div class="left_main">
                 <lunbo class="lunbo"></lunbo>
-                <!-- <router-view></router-view> -->
                 <contentList :mytype="mytypedata"></contentList>
             </div>
             <div class="right">

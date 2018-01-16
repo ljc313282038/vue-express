@@ -3,7 +3,7 @@
         <div class="container">
             <div class="left_main">
                 <div class="title">
-                    {{mas.titile}}
+                    {{mas.title}}
                 </div>
                 <div class="tag">
                     <a>
@@ -19,8 +19,8 @@
                         {{mas.like}}
                     </a>
                 </div>
-                <div class="text">
-                    {{mas.content}}
+                <div class="text" v-html='mas.content'>
+                   
                 </div>
                 <div>
                     <div id="main">
@@ -97,12 +97,9 @@ export default {
                 var pl = data.body.pl;
                 //p1没刷新前先将当下评论的数据渲染到页面
                 //push 到conten3中及时渲染页面重置或是刷新则从后台读取
-                //
                 this.content3.push({ content_pl: pl });
-                console.log(this.content3)
-
             }, (data) => {
-                console.log("err");
+                console.log(data);
             })
         },
         //获取文章及其评论列表
@@ -110,19 +107,15 @@ export default {
             var id = this.mas.id
             this.$http.get('/api/login/pageContent', { params: { dataId: id } }).then((res) => {
                 this.content3 = res.data;
-                //console.log(this.content3);
-
             }, (res) => {
-                // body...
+                console.log("err");
             })
         },
         pageContentA() {
-
             if (this.$store.state.pageContentAData != "") {
                 this.mas = this.$store.state.pageContentAData;
             } else {
                 this.mas = JSON.parse(localStorage.ms);
-                // console.log(this.mas.id);
             }
         }
     },

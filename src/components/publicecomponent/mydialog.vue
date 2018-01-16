@@ -38,10 +38,11 @@ export default {
     position: fixed;
     top: 0;
     left: 0;
+     z-index:100000;;
 }
 
 .dialog_conten {
-    z-index: 8;
+    z-index:100001;;
     width: 400px;
     background-color: #fff;
     position: fixed;

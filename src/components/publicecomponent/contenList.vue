@@ -5,7 +5,7 @@
                 <div :data-id='item.id'>
                     <div class="title">
                         <!-- <h2 :href="'page/pageContent/'+item.id">{{item.titile}}</h2> -->
-                        <h2> {{item.titile}}</h2>
+                        <h2> {{item.title}}</h2>
                     </div>
                     <div class="tag">
                         <span class="time"><i></i><a>{{item.time}}</a></span>

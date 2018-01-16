@@ -102,6 +102,7 @@ export default {
 <style type="text/css" scoped>
 .denlu_box {
   width: 100%;
+  z-index: 1000
 }
 
 .btnBox {

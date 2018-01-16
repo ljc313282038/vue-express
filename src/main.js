@@ -6,12 +6,16 @@ import Element from 'element-ui'
 import App from './App'
 import router from './router'
 import  VueResource  from 'vue-resource'
+// import axios from 'axios'
 import mavonEditor from 'mavon-editor'
 import 'mavon-editor/dist/css/index.css'
 import './assets/css/rest.css'
+// Vue.prototype.$http = axios
 
+// Vue.prototype.$http = axios
 
 Vue.use(mavonEditor)
+// Vue.use(axios)
 Vue.use(VueResource) 
 Vue.use(Element)
 Vue.config.productionTip = false
