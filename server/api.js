@@ -5,6 +5,8 @@ const app = express();
 const fs = require('fs');
 // 引入处理路径的模块
 const path = require('path');
+//处理时间模块
+const moment = require('moment');
 const router = express.Router();
 const formidable = require('formidable');
 AVATAR_UPLOAD_FOLDER = '/avatar/' //文件上传地址
@@ -89,7 +91,8 @@ router.post('/api/upData/article', (req, res) => {
     //拿到前端发过来的评论
     var article = req.body;
     var author = req.session.login;
-    var time =JSON.stringify(new Date()) ;
+    var   updataType= article.updataType;
+    var time=moment().format("YYYY-MM-DD",timezone="GMT+8");//拿到时间
     console.log(time);
     var sql = "INSERT INTO articlelist (`title`,`author`,`time`,`content`,`type`) VALUES('" + article.title + "','" + author + "','" + time + "','" + article.content + "','" + article.type + "');"
 
@@ -134,6 +137,22 @@ router.get('/api/login', (req, res) => {
     });
 });
 
+//给文章管理页面发送文章
+router.get('/api/glarticles', (req, res) => {
+    // 输出 JSON 格式
+    var params = req.query.author;
+    var sql = 'SELECT * FROM `articlelist` WHERE author=' + '\"' + params + '\"';
+    // var sql = 'SELECT * FROM `articlelist` WHERE author="@张三"';
+
+    db.query(sql, function(err, rows, fields) {
+        if (err) {
+            return;
+        }
+        response = rows;
+        res.end(JSON.stringify(response));
+    });
+});
+
 //登录api
 router.post('/api/login/onlogin', (req, res) => {
     // 拿到前端发过来的用户和密码
@@ -156,7 +175,6 @@ router.get('/api/beforlogin', (req, res) => {
         response = req.session.login;
         res.end(response);
     }else{
-
         res.end();
     }
 });

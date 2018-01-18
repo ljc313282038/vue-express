@@ -17,18 +17,23 @@
         <mavon-editor ref=md @imgAdd="$imgAdd" @imgDel="$imgDel" v-model="content" @change="change" :toolbars='toolbars' :subfield='false' style="min-height:500px">
         </mavon-editor>
         <div class="butn">
-            <el-button type="primary" @click='savearticle'>发布</el-button>
-            <el-button @click="black">返回</el-button>
+            <el-button type="primary" v-if="update2" @click='savearticle("updata")'>genx发布</el-button>
+            <el-button type="primary" v-else @click='savearticle("write")'>发布</el-button>
+            <el-button v-if="update2" @click="black2">genx返回</el-button>
+            <el-button v-else @click="black">返回</el-button>
         </div>
     </div>
 </template>
 <script>
 export default {
-	name:'onwrite',
-	data() {
+
+    name: 'onwrite',
+    data() {
         return {
+            update2: '',
             content: '', //编辑器实时显示
             Acontent: '',
+            updataType: '',
             img_file: {}, //图片
             toolbars: {
                 bold: true, // 粗体
@@ -89,34 +94,41 @@ export default {
                 type: '', //文章类型
                 title: ''
             }
-       }
+        }
     },
     methods: {
         //接收到富文本处理后的文章携带标签
         change(val, render) {
             this.Acontent = render;
         },
-        savearticle() {
+        savearticle(Type) {
+            this.updataType = Type;
             var articleIfo = {
                 title: this.formInline.title,
                 content: this.Acontent,
-                type: this.formInline.type
+                type: this.formInline.type,
+                updataType: this.updataType
             };
             this.$http.post('/api/upData/article', articleIfo).then((data) => {
-            	var articleState = data.body;
+                var articleState = data.body;
                 this.open();
             }, (data) => {
-            	console.log("err");
+                console.log("err");
             })
         },
         open() {
-        this.$message({
-          message: '恭喜你，文章发布成功',
-          type: 'success'
-        });
-      },
+            this.$message({
+                message: '恭喜你，文章发布成功',
+                type: 'success'
+            });
+        },
         black() {
             this.$router.push({ name: 'indexpage' });
+        },
+        black2() {
+            this.$router.go(-1); //返回上一层
+            this.update2 = false;
+
         },
         // 绑定@imgAdd event
         $imgAdd(pos, $file) {
@@ -130,11 +142,30 @@ export default {
             })
         },
         $imgDel() {
-        	delete this.img_file[pos];
+            delete this.img_file[pos];
+        },
+        //监控路由如果用户从管理页面重新进入发布文章页面，还原发布按钮
+        routequery() {
+            if (JSON.stringify(this.$route.query) == "{}") {
+                this.update2 = false;
+            } else {
+                this.update2 = this.$route.query.update
+            }
+
         }
+    },
+    created() {
+        this.update2 = this.$route.query.update;
+        console.log(this.$route.query.id);
+        if (this.update2 == true) {
+            //这里拿到this.$route.query.id发起请求将要修改的文章请求过来
+            console.log("xxxxx");
+        }
+    },
+    watch: {
+        "$route.query": "routequery"
     }
 }
-
 </script>
 <style scoped>
 .demo-form-inline {
@@ -159,6 +190,4 @@ export default {
     display: flex;
     padding: 20px 0;
 }
-
-
 </style>
