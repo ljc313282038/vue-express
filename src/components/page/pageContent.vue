@@ -19,7 +19,7 @@
                         {{mas.like}}
                     </a>
                 </div>
-                <div class="text" v-html='mas.content'>
+                <div class="text" id="text" v-html='mas.content'>
                    
                 </div>
                 <div>
@@ -95,6 +95,7 @@ export default {
         saveContent() {
             this.$http.post('/api/login/content', { content: this.content, dataId: this.mas.id }).then((data) => {
                 var pl = data.body.pl;
+                console.log("ee");
                 //p1没刷新前先将当下评论的数据渲染到页面
                 //push 到conten3中及时渲染页面重置或是刷新则从后台读取
                 this.content3.push({ content_pl: pl });
@@ -111,20 +112,24 @@ export default {
                 console.log("err");
             })
         },
+      
         pageContentA() {
             if (this.$store.state.pageContentAData != "") {
                 this.mas = this.$store.state.pageContentAData;
             } else {
                 this.mas = JSON.parse(localStorage.ms);
             }
-        }
+        },
     },
     mounted() { //事件钩子 加在完成后
         this.dataId = this.$route.params.id
         this.pageContentA();
-        this.ajax();
+        this.ajax() 
+        
     },
     created() { //事件钩子 组件渲染完成后 
+       
+       
     },
 }
 </script>
@@ -136,6 +141,7 @@ export default {
     padding: 20px;
     background-color: #fff;
 }
+
 
 .talk ul {
     width: 100%;
@@ -165,10 +171,13 @@ export default {
     font-size: 16px;
     color: #454545;
     text-align: left;
-
+overflow: hidden;
     line-height: 150%;
 }
 
+.text p img {
+    width: 100% !important;
+}
 .main {
     margin-top: 20px;
 }

@@ -9,7 +9,7 @@ const path = require('path');
 const moment = require('moment');
 const router = express.Router();
 const formidable = require('formidable');
-AVATAR_UPLOAD_FOLDER = '/avatar/' //文件上传地址
+var h2m = require('h2m')
 
 
 //模拟文章
@@ -91,11 +91,14 @@ router.post('/api/upData/article', (req, res) => {
     //拿到前端发过来的评论
     var article = req.body;
     var author = req.session.login;
-    var   updataType= article.updataType;
-    var time=moment().format("YYYY-MM-DD",timezone="GMT+8");//拿到时间
-    console.log(time);
-    var sql = "INSERT INTO articlelist (`title`,`author`,`time`,`content`,`type`) VALUES('" + article.title + "','" + author + "','" + time + "','" + article.content + "','" + article.type + "');"
-
+    var updataType = article.updataType;
+    var time = moment().format("YYYY-MM-DD", timezone = "GMT+8"); //拿到时间
+    var sql;
+    if (updataType == 'write') {
+        sql = "INSERT INTO articlelist (`title`,`author`,`time`,`content`,`type`) VALUES('" + article.title + "','" + author + "','" + time + "','" + article.content + "','" + article.type + "');"
+    } else if (updataType == 'updata') {
+        sql = "UPDATE articlelist SET" + " content =" + "'" + article.content + "'" + "," + " title =" + "'" + article.title + "'" + "," + "type=" + "'" + article.type + "'" + "WHERE id =" + "'" + article.id + "'"
+    }
     db.query(sql, function(err, data) {
         if (err) {
             console.log(err);
@@ -106,7 +109,7 @@ router.post('/api/upData/article', (req, res) => {
     });
 });
 
-//给子页面发送文章数据pageContent
+//给子页面发送评论pageContent
 router.get('/api/login/pageContent', (req, res) => {
     // 输出 JSON 格式
     var mydataId = req.query.dataId;
@@ -115,9 +118,26 @@ router.get('/api/login/pageContent', (req, res) => {
     db.query(sql, function(err, rows, fields) {
         if (err) {
             console.log(err);
+        }
+        response = rows;
+        res.end(JSON.stringify(response));
+       
+    });
+});
+
+//找到要修改的文章返回给页面
+router.get('/api/login/updata', (req, res) => {
+    // 输出 JSON 格式
+    var upDataId = req.query.updataId;
+    var sql = 'SELECT * FROM `articlelist` WHERE id=' + '\"' + upDataId + '\"';
+    db.query(sql, function(err, rows, fields) {
+        if (err) {
+            console.log(err);
             return;
         }
         response = rows;
+        var md = h2m(rows[0].content); //使用2m模块将html转为mkdom
+        rows[0].content = md;
         res.end(JSON.stringify(response));
         // console.log(response);
     });
@@ -142,8 +162,6 @@ router.get('/api/glarticles', (req, res) => {
     // 输出 JSON 格式
     var params = req.query.author;
     var sql = 'SELECT * FROM `articlelist` WHERE author=' + '\"' + params + '\"';
-    // var sql = 'SELECT * FROM `articlelist` WHERE author="@张三"';
-
     db.query(sql, function(err, rows, fields) {
         if (err) {
             return;
@@ -174,7 +192,7 @@ router.get('/api/beforlogin', (req, res) => {
     if (req.session.login) {
         response = req.session.login;
         res.end(response);
-    }else{
+    } else {
         res.end();
     }
 });

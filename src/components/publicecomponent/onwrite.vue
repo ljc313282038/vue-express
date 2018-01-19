@@ -33,6 +33,7 @@ export default {
             update2: '',
             content: '', //编辑器实时显示
             Acontent: '',
+            updataArcitle: '',
             updataType: '',
             img_file: {}, //图片
             toolbars: {
@@ -101,17 +102,26 @@ export default {
         change(val, render) {
             this.Acontent = render;
         },
+        opchange(event) {
+            this.d_language = event.target.value;
+            alert("q")
+        },
+
         savearticle(Type) {
             this.updataType = Type;
             var articleIfo = {
                 title: this.formInline.title,
                 content: this.Acontent,
                 type: this.formInline.type,
-                updataType: this.updataType
+                updataType: this.updataType,
+                id:this.$route.query.id //这里上传需要修改文章的id
             };
             this.$http.post('/api/upData/article', articleIfo).then((data) => {
                 var articleState = data.body;
                 this.open();
+                this.formInline.title = "";
+                this.content = "";
+                this.formInline.type = "";
             }, (data) => {
                 console.log("err");
             })
@@ -156,10 +166,15 @@ export default {
     },
     created() {
         this.update2 = this.$route.query.update;
-        console.log(this.$route.query.id);
         if (this.update2 == true) {
             //这里拿到this.$route.query.id发起请求将要修改的文章请求过来
-            console.log("xxxxx");
+            this.$http.get("/api/login/updata", { params: { updataId: this.$route.query.id } }).then((res) => {
+                this.updataArcitle = res.data[0];
+                this.formInline.type = this.updataArcitle.type;
+                this.formInline.title = this.updataArcitle.title;
+                this.content = this.updataArcitle.content;
+                console.log(this.updataArcitle.content);
+            });
         }
     },
     watch: {

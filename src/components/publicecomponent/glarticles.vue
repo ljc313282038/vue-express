@@ -33,7 +33,6 @@ export default {
 created() {     
       this.$http.get('/api/glarticles',{params:{author:this.userName}}).then((res) => {
         this.arcitle=res.data;
-        console.log(res.data);
       }, (res) => {
          console.log('未登录');
       })
