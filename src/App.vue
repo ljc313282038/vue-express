@@ -9,8 +9,8 @@
         <div class="logon">
           <a class="vdl" v-if="userName==''" @click="login">登录</a>
           <a class="ydl" v-else><i class="userAvatar"></i>{{userName}}</a>
-          <a class="vdl" v-if="userName==''" >注册</a>
-          <a v-else @click="tuichu">退出登录2</a>
+          <a class="vdl" v-if="userName==''" @click="res">注册</a>
+          <a v-else @click="tuichu">退出登录</a>
         </div>
       </span>
     </header>
@@ -18,22 +18,29 @@
     <mydialog :showDialog="show_login" @on-close="closeDialog('show_login')">
       <logform @hasLogin="soccesLogin" @cancel="cancel"></logform>
     </mydialog>
+
+     <mydialog :showDialog="show_res" @on-close="closeDialog('show_res')">
+       <resform @hasRes="soccesres"  @cancel="cancel"></resform>
+    </mydialog>
   </div>
 </template>
 <script>
 import mydialog from '@/components/publicecomponent/mydialog'
 import logform from '@/components/publicecomponent/logform'
+import resform from '@/components/publicecomponent/resform'
 import Hub from '@/components/publicecomponent/hub.js'
 import { mapState } from "vuex" // 引入mapState 
 export default {
   components: {
     mydialog,
-    logform
+    logform,
+    resform
   },
   name: 'app',
   data() {
     return {
       show_login: false,
+      show_res:false
     }
   },
   //通过计算属性将数据中心数据映射过来
@@ -46,6 +53,9 @@ export default {
   methods: {
     login() {
       this.show_login = true
+    },
+    res(){   
+      this.show_res=true
     },
     go(index){
         if(index==0){
@@ -60,11 +70,20 @@ export default {
       console.log(this.$store.state.userName);
       this.closeDialog("show_login")
     },
-    cancel(){
-      this.closeDialog("show_login")
+    soccesres(){
+    
+      this.closeDialog("show_res")
+    },
+    cancel(data){
+      this.closeDialog(data)
     },
     tuichu() {
-      this.$store.state.userName = ""
+      this.$http.get('/api/exitLogin', {params:{data:0}}).then((res)=>{
+           this.$store.state.userName = ""
+      },(res)=>{
+          console.log(ree);
+      });
+     
     },
     writeBlogging(){
      this.$router.push({ name: 'writeBlogging' });

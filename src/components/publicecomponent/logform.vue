@@ -5,7 +5,7 @@
         <label for="username">请输入用户名</label>
         <input type="text" class="username" name="username" id="username" v-model="userName" autocomplete="off" @focus='fouce(1)'/>
       </div>
-      <span class="error">{{errorusername.errortext}}</span>
+      <span class="error">{{errorpasswor.errortext1}}</span>
       <div class="password_box" :class="{border:border2==true}">
         <label for="password">请输入用户名</label>
         <input type="text" class="password" name="password" id="password" v-model="passWord" autocomplete="off" @focus='fouce(2)' >
@@ -25,65 +25,40 @@ export default {
       userName: "",
       passWord: "",
       border1: false,
-      border2: false
+      border2: false,
+      errorpasswor: {
+                errortext1: '',
+                errortext2: '',
+            }
     }
   },
   computed: {
-    errorusername() {
-      let status, errortext
-      if (!/@/g.test(this.userName)) {
-        status = false,
-          errortext = "没有@"
-      } else {
-        status = true,
-          errortext = ""
-      }
-      if (!this.userflag) {
-        errortext = "";
-        this.userflag = true
-      }
-      return {
-        status,
-        errortext
-      }
-    },
-    errorpasswor() {
-      let status, errortext2
-      if (!/^\w{1,6}$/g.test(this.passWord)) {
-        status = false,
-          errortext2 = "1-6位数"
-      } else {
-        status = true,
-          errortext2 = ""
-      }
-      if (!this.userflag2) {
-        errortext2 = "";
-        this.userflag2 = true
-      }
-      return {
-        status,
-        errortext2
-      }
-    }
+   
   },
   methods: {
     onlogin() {
-      if (!this.errorpasswor.status || !this.errorusername.status) {
-        alert("密码或用户明错误")
-      } else {
+     
         this.$http.post('/api/login/onlogin', { userName: this.userName, passWord: this.passWord }).then((data) => {
           //登录成功后返回的值
           var onloginData = data.body;
           console.log(onloginData);
-          //组件向外面传递方法
-          this.$emit('hasLogin', onloginData);
+          if(onloginData.code==0){
+              this.errorpasswor.errortext1=onloginData.masg;
+              return;
+          }else if(onloginData.code==1){
+            this.errorpasswor.errortext2=onloginData.masg;
+          }else if(onloginData.code==2){
+              
+              this.$emit('hasLogin', onloginData.masg);
+              console.log(onloginData.masg);
+          }
         }, (data) => {
           console.log("err");
         })
-      }
+      
     },
     cancel() {
-      this.$emit('cancel');
+      this.$emit('cancel',"show_login");
     },
     fouce(x) {
     	if (x==1) {

@@ -77,8 +77,7 @@ router.post('/api/login/content', (req, res) => {
     var sql = "INSERT INTO articlelist_pl (`articlelist_id`,`author_pl`,`content_pl`)VALUES ( '" + mydataId + "', '" + author_pl + "', '" + textContent + "');"
     db.query(sql, function(err, data) {
         if (err) {
-            console.log(err);
-            return;
+             throw (err);
         }
         console.log("ok");
         response = { pl: textContent };
@@ -102,7 +101,7 @@ router.post('/api/upData/article', (req, res) => {
     db.query(sql, function(err, data) {
         if (err) {
             console.log(err);
-            return;
+            throw (err);
         }
         response = "发布成功";
         res.end(JSON.stringify(response));
@@ -117,11 +116,11 @@ router.get('/api/login/pageContent', (req, res) => {
 
     db.query(sql, function(err, rows, fields) {
         if (err) {
-            console.log(err);
+            throw (err);
         }
         response = rows;
         res.end(JSON.stringify(response));
-       
+
     });
 });
 
@@ -132,8 +131,8 @@ router.get('/api/login/updata', (req, res) => {
     var sql = 'SELECT * FROM `articlelist` WHERE id=' + '\"' + upDataId + '\"';
     db.query(sql, function(err, rows, fields) {
         if (err) {
-            console.log(err);
-            return;
+            
+             throw (err);
         }
         response = rows;
         var md = h2m(rows[0].content); //使用2m模块将html转为mkdom
@@ -150,7 +149,7 @@ router.get('/api/login', (req, res) => {
     var sql = 'SELECT * FROM `articlelist` WHERE TYPE=' + '\"' + params.rot + '\"';
     db.query(sql, function(err, rows, fields) {
         if (err) {
-            return;
+             throw (err);
         }
         response = rows;
         res.end(JSON.stringify(response));
@@ -164,7 +163,7 @@ router.get('/api/glarticles', (req, res) => {
     var sql = 'SELECT * FROM `articlelist` WHERE author=' + '\"' + params + '\"';
     db.query(sql, function(err, rows, fields) {
         if (err) {
-            return;
+             throw (err);
         }
         response = rows;
         res.end(JSON.stringify(response));
@@ -176,14 +175,83 @@ router.post('/api/login/onlogin', (req, res) => {
     // 拿到前端发过来的用户和密码
     var userData_1 = req.body;
     //在用户中查找与请求相同的返回--登录成功
-    var userData_2 = content.users.filter(function(item) {
-        return item.userName == userData_1.userName && item.passWord == userData_1.passWord;
+    var sql = 'SELECT * FROM `users` WHERE userName=' + '\"' + userData_1.userName + '\"';
+    // var userData_2 = content.users.filter(function(item) {
+    //     return item.userName == userData_1.userName && item.passWord == userData_1.passWord;
+    // });
+    db.query(sql, function(err, rows, fields) {
+        var response = {
+            code: "",
+            masg: '',
+        };
+        if (err) {
+
+             throw (err);
+        }
+
+        if (rows == "") {
+            response.code = 0;
+            response.masg = "用户名不正确";
+            res.end(JSON.stringify(response));
+            return;
+        } else if (rows[0].passWord !== userData_1.passWord) {
+            response.code = 1;
+            response.masg = "密码不正确";
+            res.end(JSON.stringify(response));
+            return;
+        } else {
+            response.code = 2;
+            req.session.login = rows[0].userName; //每一次访问时，session对象的lastPage会自动的保存或更新内存中的session中去。
+            response.masg = rows[0].userName;
+            res.end(JSON.stringify(response));
+        }
     });
-    if (userData_2) {
-        req.session.login = userData_2[0].userName; //每一次访问时，session对象的lastPage会自动的保存或更新内存中的session中去。         
+
+});
+
+router.post('/api/login/reslogin', (req, res) => {
+    // 拿到前端发过来的用户和密码
+    var resData = req.body;
+    var response = {
+        code: "",
+        masg: '',
+    };
+
+    if (resData.userName == "") {
+        response.code = 0;
+        response.masg = "用户名不能为空";
+        res.end(JSON.stringify(response));
+        return;
+    } else if (resData.passWord == "") {
+        response.code = 1;
+        response.masg = "密码不能为空";
+        res.end(JSON.stringify(response));
+        return;
+    } else if (resData.passWord != resData.agenpassWord) {
+        response.code = 2;
+        response.masg = "两次输入的密码不同";
+        res.end(JSON.stringify(response));
+    } else {
+        response.code = 3;
+        response.masg = "注册成功";
+        sql = "INSERT INTO users (`userName`,`passWord`) VALUES('" + resData.userName + "','" + resData.passWord + "');"
+        db.query(sql, function(err, data) {
+            if (err) {
+                 throw (err);
+            }
+            res.end(JSON.stringify(response));
+        });
     }
-    response = req.session.login;
-    res.end(response);
+
+
+});
+
+//退出登录
+router.get('/api/exitLogin', (req, res) => {
+    if (req.session.login) {
+        req.session.login = "";
+    }
+    res.end();
 });
 
 //判断是否登录
