@@ -2,15 +2,48 @@
 const express = require('express');
 const session = require('express-session');
 const cookieParser = require('cookie-parser');
+var mysql = require('mysql');
 const moment = require('moment');
+var MySQLStore = require('express-mysql-session')(session);
+var db = require('./db.js');
 const app = express();
 app.use(cookieParser());
+/**
+ * 将session数据
+ * @type {String}
+ */
+// app.use(session({
+//     secret: '12345',
+//     name: 'testapp',   //这里的name值得是cookie的name，默认cookie的name是：connect.sid
+//     cookie: {maxAge: 1000 * 60 * 60 * 24 * 30 },  //设置maxAge是30天，即80s后session和相应的cookie失效过期
+//     resave: false,
+//     saveUninitialized: true,
+//     secret: 'session_cookie_secret',  
+//     store: new SessionStore(options)  
+// }));
+
+
+
+/**
+ * 将session数据存储到mysql
+ * @type {String}
+ */
+var options = {  
+    host: 'localhost',  
+    port: 3306,  
+    user: 'root',  
+    password: '',  
+    database: 'article'  
+} 
 app.use(session({
-    secret: '12345',
-    name: 'testapp',   //这里的name值得是cookie的name，默认cookie的name是：connect.sid
-    cookie: {maxAge: 1000 * 60 * 60 * 24 * 30 },  //设置maxAge是30天，即80s后session和相应的cookie失效过期
-    resave: false,
-    saveUninitialized: true,
+	key: 'session_cookie_name',
+	secret: 'session_cookie_secret',
+	store: new MySQLStore(options),
+	resave: false,
+	saveUninitialized: true,
+	cookie:{
+        maxAge:1000*60*60*24
+    }
 }));
 
 

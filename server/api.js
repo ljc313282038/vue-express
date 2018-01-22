@@ -14,20 +14,6 @@ var h2m = require('h2m')
 
 //模拟文章
 var content = {
-    users: [ //用户表
-        {
-            userName: '@张三',
-            passWord: '12345',
-            // userAvatar:'15828041.jpg',
-
-        },
-        {
-            userName: '@张四',
-            passWord: '12345',
-            // userAvatar:"require('./assets/images/15828041.jpg')",
-
-        }
-    ],
 
     latest: [{
             latestTit: '从招式与内功谈起——设计模式概述1',

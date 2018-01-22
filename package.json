@@ -16,6 +16,7 @@
     "cookie-parser": "^1.4.3",
     "element-ui": "^2.0.9",
     "express": "^4.16.2",
+    "express-mysql-session": "^1.2.3",
     "express-session": "^1.15.6",
     "formidable": "^1.1.1",
     "h2m": "^0.6.0",
