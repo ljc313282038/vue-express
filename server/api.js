@@ -93,6 +93,18 @@ router.post('/api/upData/article', (req, res) => {
         res.end(JSON.stringify(response));
     });
 });
+//删除文章
+router.get('/api/login/delet', (req,res)=>{
+    var id=req.query.id;
+    
+    var sql="delete from `articlelist` where id="+'\"'+id+'\"';
+    db.query(sql, function(err, rows, fields) {
+        if (err) {
+            throw (err);
+        }
+        res.end();
+    });
+});
 
 //给子页面发送评论pageContent
 router.get('/api/login/pageContent', (req, res) => {

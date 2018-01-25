@@ -22,8 +22,6 @@ app.use(cookieParser());
 //     store: new SessionStore(options)  
 // }));
 
-
-
 /**
  * 将session数据存储到mysql
  * @type {String}
@@ -71,9 +69,10 @@ app.use(express.static(path.resolve(__dirname, 'publice')));
 
 
 // 因为是单页应用 所有请求都走/dist/index.html
-app.get('/', function(req, res) {
+app.get('/', function(req, res,next) {
     const html = fs.readFileSync(path.resolve(__dirname, '../dist/index.html'), 'utf-8');
-    res.send(html)
+    res.send(html);
+    next();
 });
 
 // 监听8088端口
